@@ -12,8 +12,8 @@
   ```
 
 ```bash
-git clone https://github.com/doramirdor/nadir-bench.git
-cd nadir-bench
+git clone https://github.com/doramirdor/farthing.git
+cd farthing
 ```
 
 > Every run below costs real Opus tokens on your account and edits only throwaway

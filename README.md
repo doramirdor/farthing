@@ -1,13 +1,17 @@
 <div align="center">
 
-# ▲ NADIR·BENCH
+# ▲ FARTHING
 
-### Cut your AI costs, not your accuracy.
+### The honest token meter for Claude Code. Count every farthing.
 
-**An open, reproducible benchmark of token-cost tools on real Claude Code work.**
-Priced at the bill, not at a dashboard.
+**Measure your real bill. Run only what pays. Prove accuracy didn't move —
+without ever busting the cache.**
 
-`LOWEST VIABLE MODEL · VERIFIED BY NADIR`
+`accuracy-gated token control · part of` **[Nadir](https://getnadir.com)** · `LOWEST VIABLE MODEL · VERIFIED`
+
+```bash
+npx @getnadir/farthing audit      # decompose your real Claude Code bill
+```
 
 [getnadir.com](https://getnadir.com) · [The receipts](#-the-receipts) · [Why compression loses](#why-compression-loses-on-claude-code) · [Reproduce](REPRODUCE.md)
 
@@ -15,12 +19,15 @@ Priced at the bill, not at a dashboard.
 
 ---
 
-> **Nadir routes every prompt to its leanest capable model and verifies the answer
-> before you see it — 60% cheaper, 98% of always-Opus quality.**
-> This repo is the other half of that thesis: we measured the *token-shaving*
-> tools everyone reaches for first, on real Claude Code sessions, and priced the
-> **actual bill**. They don't just fail to help — one of them **triples it while
-> its own dashboard reports a saving.**
+> **Farthing** is the cache-safe spend controller for Claude Code & Codex — from the
+> team behind **[Nadir](https://getnadir.com)**, the verifier-gated LLM router.
+> Nadir picks the leanest model and verifies the answer; farthing measures the
+> **actual bill** and cuts it **without touching the cached prefix**.
+>
+> This repo is the proof. We benchmarked the *token-shaving* tools everyone reaches
+> for first, on real Claude Code sessions, priced the **actual bill** — and put
+> farthing head-to-head. One competitor **triples the bill while its own dashboard
+> reports a saving.** farthing cuts it and never busts the cache.
 
 ---
 
@@ -32,7 +39,7 @@ session on Opus — three arms, every turn metered.
 | arm | session cost | vs baseline | cache_create | what it does |
 |-----|-------------:|------------:|-------------:|--------------|
 | **baseline** | `$0.730` | — | 40k | plain Claude Code |
-| **scrooge** | `$0.643` | **−12%** ✅ | 37k (flat) | measures the bill, never touches the cached prefix |
+| **farthing** | `$0.643` | **−12%** ✅ | 37k (flat) | measures the bill, never touches the cached prefix |
 | **headroom** | `$2.788` | **+282%** ❌ | 337k (**8×**) | rewrites the prefix to "compress" → busts the cache |
 
 > headroom **genuinely compressed** (its `/stats`: 41% avg, 86k tokens removed) and
@@ -45,7 +52,7 @@ session on Opus — three arms, every turn metered.
 
 | `−12%` | `+282%` | `0%` |
 |:---:|:---:|:---:|
-| **scrooge** — cache-safe, real | **headroom** — cache-bust, real bill | **dashboard truth** — its ledger said it *saved* |
+| **farthing** — cache-safe, real | **headroom** — cache-bust, real bill | **dashboard truth** — its ledger said it *saved* |
 
 </div>
 
@@ -68,12 +75,12 @@ Claude to **re-create** the whole downstream context at 12× the price.
 - **headroom** deletes ~15–41% of some tokens (its dashboard counts this as saved)
   but shoves the survivors from the `$1.50` lane into the `$18.75` lane (its
   dashboard never counts this). Net: **bill up 45–282%.**
-- **scrooge** never touches the cached prefix. It trims the **output** lane
+- **farthing** never touches the cached prefix. It trims the **output** lane
   (terse-output) and blocks **byte-identical re-reads** (read-ledger) — cache-safe
   savings — while *measuring* cache churn instead of causing it. Net: **−12%,
   cache_create flat.**
 
-> Same axis — `cache_create`. headroom **manufactures** it; scrooge **measures and
+> Same axis — `cache_create`. headroom **manufactures** it; farthing **measures and
 > avoids** it. That is the whole idea.
 
 ---
@@ -88,7 +95,7 @@ Every number below is reproducible from [`REPRODUCE.md`](REPRODUCE.md).
 | arm | median $/task | vs baseline | accuracy |
 |-----|-------------:|------------:|---------:|
 | baseline | $0.311 | — | 23/24 |
-| scrooge terse | $0.296 | **−5%** | 24/24 |
+| farthing terse | $0.296 | **−5%** | 24/24 |
 | caveman | $0.364 | **+17%** | 24/24 |
 | headroom | $0.581 | **+87%** | 24/24 |
 
@@ -112,12 +119,12 @@ Full write-up: [docs/FINDINGS.md](docs/FINDINGS.md).
 | tool | axis it attacks | verdict on Claude Code coding |
 |------|-----------------|-------------------------------|
 | **[Nadir](https://getnadir.com)** | *which model runs* (route + verify) | **−60%**, 98% quality — the axis that actually moves the bill |
-| **scrooge** | *measures the whole bill; cache-safe layers* | **−5% to −12%**, accuracy-gated, never busts cache |
+| **farthing** | *measures the whole bill; cache-safe layers* | **−5% to −12%**, accuracy-gated, never busts cache |
 | **caveman** | *output tokens* | **+16–17%** — cuts output (~1% of a coding bill) but adds per-turn injection |
 | **headroom** | *input tokens (compress)* | **+45% to +282%** — compresses, but rewriting the prefix busts the cache |
 
 > The savings live at **model choice** (Nadir) and **honest measurement + cache
-> discipline** (scrooge) — never at token-shaving a cache-dominated bill.
+> discipline** (farthing) — never at token-shaving a cache-dominated bill.
 
 ---
 

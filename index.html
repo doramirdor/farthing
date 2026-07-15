@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nadir·Bench — Cut your AI costs, not your accuracy</title>
+<title>Farthing — the honest token meter for Claude Code</title>
 <style>
   :root{
     --bg:#0a0a0b; --bg2:#101013; --panel:#141417; --line:#26262b;
@@ -89,7 +89,7 @@
 </head>
 <body>
 <header><div class="wrap">
-  <div class="brand"><span class="tri">▲</span> Nadir·Bench</div>
+  <div class="brand"><span class="tri">▲</span> Farthing</div>
   <nav>
     <a href="#receipts">Receipts</a>
     <a href="#why">Why</a>
@@ -99,14 +99,15 @@
 </div></header>
 
 <div class="hero"><div class="wrap">
-  <span class="pill"><span class="dot"></span> Lowest viable model · Verified by Nadir</span>
-  <h1>Cut your AI costs,<br><span class="g">not your accuracy.</span></h1>
-  <p class="lead">An open, reproducible benchmark of token-cost tools on real Claude Code
-  sessions — priced at the <b>actual bill</b>, not at a dashboard. One tool triples the
-  bill while reporting a saving. Here's the proof.</p>
+  <span class="pill"><span class="dot"></span> Accuracy-gated token control · part of Nadir</span>
+  <h1>Count every<br><span class="g">farthing.</span></h1>
+  <p class="lead">The honest token meter for Claude Code. Measure your <b>real bill</b>,
+  run only what pays, and cut cost <b>without ever busting the cache</b> — while the
+  compressors triple the bill and report a saving. Here's the proof.</p>
+  <pre style="max-width:520px;margin-top:22px">npx @getnadir/farthing audit   <span style="color:var(--faint)"># decompose your real bill</span></pre>
   <div class="cta">
-    <a class="btn primary" href="https://getnadir.com">Start routing →</a>
-    <a class="btn ghost" href="#receipts">See the receipts</a>
+    <a class="btn primary" href="#receipts">See the receipts →</a>
+    <a class="btn ghost" href="https://getnadir.com">Nadir ↗</a>
   </div>
 </div></div>
 
@@ -116,7 +117,7 @@
   <p class="muted" style="margin-top:0">Add a method to <b>expressjs/express</b> — a multi-turn Claude Code session on Opus.</p>
   <div class="cards" style="margin:22px 0 26px">
     <div class="card base"><div class="lab">baseline</div><div class="big">$0.730</div><div class="sub">plain Claude Code</div></div>
-    <div class="card win"><div class="lab">scrooge</div><div class="big">−12%</div><div class="sub">cache-safe · $0.643</div></div>
+    <div class="card win"><div class="lab">farthing</div><div class="big">−12%</div><div class="sub">cache-safe · $0.643</div></div>
     <div class="card bad"><div class="lab">headroom</div><div class="big">+282%</div><div class="sub">cache-bust · $2.788</div></div>
   </div>
   <div class="receipt">
@@ -124,7 +125,7 @@
     <div class="rrow"><span class="k">headroom /stats — compression</span><span class="v">41% avg · 86,435 tokens removed</span></div>
     <div class="rrow"><span class="k">headroom /stats — reported</span><span class="v">"saved −16%"</span></div>
     <div class="rrow"><span class="k">cache_create (baseline → headroom)</span><span class="v bad">40k → 337k · 8×</span></div>
-    <div class="rrow"><span class="k">cache_create (baseline → scrooge)</span><span class="v win">40k → 37k · flat</span></div>
+    <div class="rrow"><span class="k">cache_create (baseline → farthing)</span><span class="v win">40k → 37k · flat</span></div>
     <div class="rrow"><span class="k">actual bill</span><span class="v bad">+282%</span></div>
   </div>
   <blockquote>headroom <b>genuinely compressed</b> — and reported a <b>−16% saving</b>.
@@ -144,11 +145,11 @@
   <b style="color:var(--ink)">Compression rewrites the prefix to shrink it</b>, invalidating the cache from the
   edit point on, forcing Claude to <b style="color:var(--ink)">re-create</b> the whole downstream context
   at 12× the price. headroom counts the tokens it deleted; it never counts the survivors it
-  shoved into the expensive lane. <b style="color:var(--ink)">scrooge never touches the cached prefix</b> —
+  shoved into the expensive lane. <b style="color:var(--ink)">farthing never touches the cached prefix</b> —
   it trims output and blocks byte-identical re-reads, and <b style="color:var(--ink)">measures</b> cache
   churn instead of causing it.</p>
   <blockquote>Same axis — <span class="mono">cache_create</span>. headroom <b>manufactures</b> it;
-  scrooge <b>measures and avoids</b> it. That is the whole idea.</blockquote>
+  farthing <b>measures and avoids</b> it. That is the whole idea.</blockquote>
 </div></section>
 
 <section id="study"><div class="wrap">
@@ -158,7 +159,7 @@
     <table>
       <tr><th>arm</th><th>median $/task (96 runs)</th><th>vs baseline</th><th>accuracy</th></tr>
       <tr><td>baseline</td><td class="n">$0.311</td><td class="n">—</td><td class="n">23/24</td></tr>
-      <tr><td>scrooge terse</td><td class="n">$0.296</td><td class="n win">−5%</td><td class="n">24/24</td></tr>
+      <tr><td>farthing terse</td><td class="n">$0.296</td><td class="n win">−5%</td><td class="n">24/24</td></tr>
       <tr><td>caveman</td><td class="n">$0.364</td><td class="n bad">+17%</td><td class="n">24/24</td></tr>
       <tr><td>headroom</td><td class="n">$0.581</td><td class="n bad">+87%</td><td class="n">24/24</td></tr>
     </table>
@@ -172,13 +173,13 @@
     <table>
       <tr><th>tool</th><th>axis</th><th>verdict on Claude Code coding</th></tr>
       <tr><td><a href="https://getnadir.com">Nadir</a></td><td>which model runs (route + verify)</td><td class="win">−60%, 98% quality — the axis that moves the bill</td></tr>
-      <tr><td>scrooge</td><td>measure bill; cache-safe layers</td><td class="win">−5% to −12%, gated, never busts cache</td></tr>
+      <tr><td>farthing</td><td>measure bill; cache-safe layers</td><td class="win">−5% to −12%, gated, never busts cache</td></tr>
       <tr><td>caveman</td><td>output tokens</td><td class="bad">+16–17%</td></tr>
       <tr><td>headroom</td><td>input tokens (compress)</td><td class="bad">+45% to +282%</td></tr>
     </table>
   </div>
   <blockquote>The savings live at <b>model choice</b> (Nadir) and <b>honest measurement +
-  cache discipline</b> (scrooge) — never at token-shaving a cache-dominated bill.</blockquote>
+  cache discipline</b> (farthing) — never at token-shaving a cache-dominated bill.</blockquote>
 </div></section>
 
 <section><div class="wrap">
