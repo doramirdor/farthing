@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nadir·Bench — Cut your AI costs, not your accuracy</title>
+<style>
+  :root{
+    --bg:#0a0a0b; --bg2:#101013; --panel:#141417; --line:#26262b;
+    --ink:#f4f2ee; --dim:#a3a099; --faint:#6b6862;
+    --amber:#e8b04b; --amber2:#f0c674; --green:#6fcf97; --red:#e5675a;
+    --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+  a{color:var(--amber2);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  header{border-bottom:1px solid var(--line);padding:20px 0;position:sticky;top:0;background:rgba(10,10,11,.85);backdrop-filter:blur(8px);z-index:10}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:.02em}
+  .brand .tri{color:var(--amber)}
+  nav a{color:var(--dim);font-size:14px;margin-left:20px}
+  nav a:hover{color:var(--ink)}
+
+  .hero{padding:90px 0 60px;border-bottom:1px solid var(--line);
+    background:radial-gradient(900px 400px at 50% -10%,rgba(232,176,75,.10),transparent 70%)}
+  .hero h1{font-size:clamp(38px,6vw,68px);line-height:1.02;margin:18px 0 10px;letter-spacing:-.02em;font-weight:700}
+  .hero h1 .g{background:linear-gradient(90deg,var(--amber2),#d98f5a);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{font-size:19px;color:var(--dim);max-width:640px}
+  .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+  .cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:12px 20px;border-radius:10px;font-weight:600;font-size:15px}
+  .btn.primary{background:var(--amber);color:#1a1406}
+  .btn.primary:hover{background:var(--amber2);text-decoration:none}
+  .btn.ghost{border:1px solid var(--line);color:var(--ink)}
+  .btn.ghost:hover{border-color:var(--faint);text-decoration:none}
+
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:13px;font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin:0 0 24px}
+  h3{font-size:26px;margin:0 0 8px;letter-spacing:-.01em}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card .lab{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .card .big{font-size:40px;font-weight:700;margin:6px 0 2px;letter-spacing:-.02em}
+  .card .sub{color:var(--dim);font-size:14px}
+  .card.win{border-color:rgba(111,207,151,.35)}
+  .card.win .big{color:var(--green)}
+  .card.bad{border-color:rgba(229,103,90,.35)}
+  .card.bad .big{color:var(--red)}
+  .card.base .big{color:var(--ink)}
+
+  .receipt{background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-family:var(--mono);font-size:13px}
+  .receipt .rh{padding:10px 16px;border-bottom:1px solid var(--line);color:var(--faint);letter-spacing:.14em;font-size:11px;text-transform:uppercase}
+  .rrow{display:flex;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--line)}
+  .rrow:last-child{border-bottom:0}
+  .rrow .k{color:var(--dim)}
+  .rrow .v{color:var(--ink)}
+  .v.win{color:var(--green)} .v.bad{color:var(--red)}
+
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:500}
+  td.n{text-align:right;font-family:var(--mono)}
+  .win{color:var(--green)} .bad{color:var(--red)}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+
+  .lanes{display:grid;grid-template-columns:1fr;gap:10px;max-width:560px}
+  .lane{display:grid;grid-template-columns:170px 1fr 70px;align-items:center;gap:12px}
+  .lane .bar{height:12px;border-radius:6px;background:var(--amber)}
+  .lane .nm{color:var(--dim);font-family:var(--mono);font-size:13px}
+  .lane .px{font-family:var(--mono);color:var(--ink);text-align:right}
+
+  blockquote{margin:24px 0 0;padding:16px 20px;border-left:3px solid var(--amber);background:var(--panel);border-radius:0 10px 10px 0;color:var(--dim)}
+  blockquote b{color:var(--ink)}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px;overflow-x:auto;font-family:var(--mono);font-size:13px;color:#d7d4cd}
+  .muted{color:var(--faint);font-size:13px}
+  footer{padding:48px 0;text-align:center;color:var(--faint)}
+  footer .mono{font-size:12px;letter-spacing:.12em}
+  @media(max-width:720px){.cards{grid-template-columns:1fr}.lane{grid-template-columns:120px 1fr 60px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><span class="tri">▲</span> Nadir·Bench</div>
+  <nav>
+    <a href="#receipts">Receipts</a>
+    <a href="#why">Why</a>
+    <a href="#study">Study</a>
+    <a href="https://getnadir.com">getnadir.com ↗</a>
+  </nav>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <span class="pill"><span class="dot"></span> Lowest viable model · Verified by Nadir</span>
+  <h1>Cut your AI costs,<br><span class="g">not your accuracy.</span></h1>
+  <p class="lead">An open, reproducible benchmark of token-cost tools on real Claude Code
+  sessions — priced at the <b>actual bill</b>, not at a dashboard. One tool triples the
+  bill while reporting a saving. Here's the proof.</p>
+  <div class="cta">
+    <a class="btn primary" href="https://getnadir.com">Start routing →</a>
+    <a class="btn ghost" href="#receipts">See the receipts</a>
+  </div>
+</div></div>
+
+<section id="receipts"><div class="wrap">
+  <h2>▮ The receipts</h2>
+  <h3>Same real task, three arms, every turn metered</h3>
+  <p class="muted" style="margin-top:0">Add a method to <b>expressjs/express</b> — a multi-turn Claude Code session on Opus.</p>
+  <div class="cards" style="margin:22px 0 26px">
+    <div class="card base"><div class="lab">baseline</div><div class="big">$0.730</div><div class="sub">plain Claude Code</div></div>
+    <div class="card win"><div class="lab">scrooge</div><div class="big">−12%</div><div class="sub">cache-safe · $0.643</div></div>
+    <div class="card bad"><div class="lab">headroom</div><div class="big">+282%</div><div class="sub">cache-bust · $2.788</div></div>
+  </div>
+  <div class="receipt">
+    <div class="rh">Verification receipt · express / feature · Opus</div>
+    <div class="rrow"><span class="k">headroom /stats — compression</span><span class="v">41% avg · 86,435 tokens removed</span></div>
+    <div class="rrow"><span class="k">headroom /stats — reported</span><span class="v">"saved −16%"</span></div>
+    <div class="rrow"><span class="k">cache_create (baseline → headroom)</span><span class="v bad">40k → 337k · 8×</span></div>
+    <div class="rrow"><span class="k">cache_create (baseline → scrooge)</span><span class="v win">40k → 37k · flat</span></div>
+    <div class="rrow"><span class="k">actual bill</span><span class="v bad">+282%</span></div>
+  </div>
+  <blockquote>headroom <b>genuinely compressed</b> — and reported a <b>−16% saving</b>.
+  The <b>real bill rose 45–282%</b>. Self-reported savings were <b>the wrong sign</b>.</blockquote>
+</div></section>
+
+<section id="why"><div class="wrap">
+  <h2>▮ Why compression loses on Claude Code</h2>
+  <h3>The bill <em>is</em> the cache</h3>
+  <p class="muted" style="margin-top:0">Three price lanes (Opus, per 1M tokens). Cache-read is 12× cheaper than cache-create for the same token.</p>
+  <div class="lanes" style="margin:22px 0 26px">
+    <div class="lane"><span class="nm">cache read (stable)</span><span class="bar" style="width:8%"></span><span class="px">$1.50</span></div>
+    <div class="lane"><span class="nm">fresh input</span><span class="bar" style="width:40%"></span><span class="px">$15</span></div>
+    <div class="lane"><span class="nm">cache create (rewrite)</span><span class="bar" style="width:50%;background:var(--red)"></span><span class="px">$18.75</span></div>
+  </div>
+  <p style="max-width:640px;color:var(--dim)">A stable prefix is served from cache — nearly free.
+  <b style="color:var(--ink)">Compression rewrites the prefix to shrink it</b>, invalidating the cache from the
+  edit point on, forcing Claude to <b style="color:var(--ink)">re-create</b> the whole downstream context
+  at 12× the price. headroom counts the tokens it deleted; it never counts the survivors it
+  shoved into the expensive lane. <b style="color:var(--ink)">scrooge never touches the cached prefix</b> —
+  it trims output and blocks byte-identical re-reads, and <b style="color:var(--ink)">measures</b> cache
+  churn instead of causing it.</p>
+  <blockquote>Same axis — <span class="mono">cache_create</span>. headroom <b>manufactures</b> it;
+  scrooge <b>measures and avoids</b> it. That is the whole idea.</blockquote>
+</div></section>
+
+<section id="study"><div class="wrap">
+  <h2>▮ The full study</h2>
+  <h3>96 agentic runs + real-project sessions</h3>
+  <div class="tablewrap" style="margin:20px 0">
+    <table>
+      <tr><th>arm</th><th>median $/task (96 runs)</th><th>vs baseline</th><th>accuracy</th></tr>
+      <tr><td>baseline</td><td class="n">$0.311</td><td class="n">—</td><td class="n">23/24</td></tr>
+      <tr><td>scrooge terse</td><td class="n">$0.296</td><td class="n win">−5%</td><td class="n">24/24</td></tr>
+      <tr><td>caveman</td><td class="n">$0.364</td><td class="n bad">+17%</td><td class="n">24/24</td></tr>
+      <tr><td>headroom</td><td class="n">$0.581</td><td class="n bad">+87%</td><td class="n">24/24</td></tr>
+    </table>
+  </div>
+  <p class="muted">Real express sessions: headroom <span class="bad">+45% / +58% / +99%</span> across trace / feature / bugfix — dashboard reported a saving on every one.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>▮ The tools, placed</h2>
+  <div class="tablewrap" style="margin:20px 0">
+    <table>
+      <tr><th>tool</th><th>axis</th><th>verdict on Claude Code coding</th></tr>
+      <tr><td><a href="https://getnadir.com">Nadir</a></td><td>which model runs (route + verify)</td><td class="win">−60%, 98% quality — the axis that moves the bill</td></tr>
+      <tr><td>scrooge</td><td>measure bill; cache-safe layers</td><td class="win">−5% to −12%, gated, never busts cache</td></tr>
+      <tr><td>caveman</td><td>output tokens</td><td class="bad">+16–17%</td></tr>
+      <tr><td>headroom</td><td>input tokens (compress)</td><td class="bad">+45% to +282%</td></tr>
+    </table>
+  </div>
+  <blockquote>The savings live at <b>model choice</b> (Nadir) and <b>honest measurement +
+  cache discipline</b> (scrooge) — never at token-shaving a cache-dominated bill.</blockquote>
+</div></section>
+
+<section><div class="wrap">
+  <h2>▮ Reproduce it yourself</h2>
+  <pre>git clone --depth 1 https://github.com/expressjs/express.git /tmp/express-bench
+( cd /tmp/express-bench &amp;&amp; npm install )
+headroom proxy --port 8787 --mode token &amp;
+bash benchmark/express_session.sh baseline feature
+bash benchmark/express_session.sh headroom feature   <span style="color:var(--faint)"># compare totals, not its dashboard</span></pre>
+  <p class="muted">Full runbook in <a href="REPRODUCE.md">REPRODUCE.md</a>. Every run edits only throwaway <span class="mono">/tmp</span> copies.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="mono kicker">Route lower · verify · escalate only if needed</div>
+  <p style="margin-top:14px">Built alongside <a href="https://getnadir.com">Nadir</a> — the verifier-gated LLM router.</p>
+</div></footer>
+</body>
+</html>

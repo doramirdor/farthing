@@ -1,0 +1,11 @@
+{
+  "name": "bench-calculator",
+  "version": "1.0.0",
+  "description": "Expression calculator — benchmark target for agentic coding-cost tests.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "license": "MIT"
+}

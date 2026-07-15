@@ -1,0 +1,46 @@
+{
+ "generatedAt": "2026-07-14T01:41:44.998Z",
+ "totalUsd": 15937.420072649995,
+ "streamPct": {
+  "freshInput": 2.849762784250244,
+  "cacheWrite": 42.24906696351128,
+  "cacheRead": 43.426322211193295,
+  "output": 11.474848041047778
+ },
+ "avoidableWasteUsd": 41.33972841990357,
+ "avoidableWastePct": 0.25938783210493493,
+ "advisoryUsd": 37.51362499999999,
+ "unexplainedCacheCreateUsd": 2243.3422087999993,
+ "unexplainedCacheCreatePct": 14.075943274217703,
+ "corpus": {
+  "sessions": 8994,
+  "projects": 47
+ },
+ "topFixes": [
+  {
+   "category": "verbose_output",
+   "layer": "terse-output",
+   "usd": 25.63
+  },
+  {
+   "category": "subagent_coldstart",
+   "layer": "campfire",
+   "usd": 10.05
+  },
+  {
+   "category": "cache_invalidations",
+   "layer": "prefix-guard",
+   "usd": 3.86
+  },
+  {
+   "category": "compaction",
+   "layer": "prefix-guard",
+   "usd": 1.56
+  },
+  {
+   "category": "redundant_reads",
+   "layer": "read-ledger",
+   "usd": 0.21
+  }
+ ]
+}
