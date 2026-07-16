@@ -100,10 +100,13 @@ curl -s localhost:8787/stats | python3 -c "import sys,json;d=json.load(sys.stdin
 This is what headroom *reports*. Compare it to the real `/cost`. **They will differ.**
 
 ### c) Ground truth — the transcript (Terminal C)
-Every session is logged with exact per-message usage. After a run:
+Every session is logged with exact per-message usage. Point at **that run's** project
+folder (not all of `~/.claude/projects` — you may have thousands of sessions):
 ```bash
-# newest transcript (run right after you /exit)
-J=$(ls -t ~/.claude/projects/*/*.jsonl | head -1); echo "$J"
+# pass the run dir you used: /tmp/run-base  or  /tmp/run-hr
+RUN=/tmp/run-base
+DIR=~/.claude/projects/$(cd "$RUN" && pwd -P | sed 's#/#-#g')   # resolves macOS /tmp -> /private/tmp
+J=$(ls -t "$DIR"/*.jsonl | head -1); echo "$J"
 
 # sum every token lane + Opus-priced cost
 node -e '
