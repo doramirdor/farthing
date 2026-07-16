@@ -1,5 +1,22 @@
 # Findings
 
+## ⚠️ Retractions (read first)
+
+This study corrected itself twice. Both corrections are kept public on purpose.
+
+1. **Single-run savings figures are retracted.** Earlier drafts claimed
+   *token-optimizer −22.5%* and *farthing −12%* from **one run each**. A 3-rep
+   replication showed the noise floor is **±63%** (baseline alone ran $6.38 →
+   $10.37 on identical inputs) — tokopt came back **+6%** on the next rep. Those
+   numbers were noise. Gone.
+2. **The single-shot `-p` harness was the wrong instrument.** `--allowedTools ""`
+   meant no file reads and no cache dynamics, so it structurally could not exercise
+   the tools under test. Replaced by real multi-turn agentic sessions.
+
+What survives is in [`results/arms_4x3.md`](../results/arms_4x3.md): effects that
+clear the noise floor, corroborated by an independent metric (`cache_create`).
+
+
 ## ⭐ Headline: the agentic matrix (96 runs, tools ON)
 
 The Q&A findings below were run on a **broken single-shot harness**

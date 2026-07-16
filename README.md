@@ -33,28 +33,40 @@ npx @getnadir/farthing audit      # decompose your real Claude Code bill
 
 ## ▮ The receipts
 
-Same real task — add a method to **expressjs/express**, a multi-turn Claude Code
-session on Opus — three arms, every turn metered.
+Real multi-turn Claude Code sessions on a fresh **expressjs/express** clone, Opus,
+6 identical prompts per session. **4 arms × 3 reps**, interleaved, every turn
+metered. Full method + caveats: [`results/arms_4x3.md`](results/arms_4x3.md).
 
-| arm | session cost | vs baseline | cache_create | what it does |
-|-----|-------------:|------------:|-------------:|--------------|
-| **baseline** | `$0.730` | — | 40k | plain Claude Code |
-| **farthing** | `$0.643` | **−12%** ✅ | 37k (flat) | measures the bill, never touches the cached prefix |
-| **headroom** | `$2.788` | **+282%** ❌ | 337k (**8×**) | rewrites the prefix to "compress" → busts the cache |
+| arm | median session | vs baseline | cache_create | separation |
+|-----|---------------:|------------:|-------------:|-----------:|
+| **baseline** | `$6.468` | — | 349k | — |
+| **combo** (farthing+tokopt) | `$3.826` | **−41%** | 184k | **3/3** ✅ |
+| **farthing** | `$4.623` | **−28%** | 275k | 2/3 |
+| **token-optimizer** | `$6.956` | +7.5% | 366k | 0/3 ✗ |
+| **headroom** | — | **costs more, 10/10 trials** | **2.4–8×** ❌ | — |
 
-> headroom **genuinely compressed** (its `/stats`: 41% avg, 86k tokens removed) and
-> reported a **−16% saving.** The **real bill rose 45–282%.** Self-reported savings
-> were **the wrong sign.**
+> **Read these as directional, not exact.** Session cost is brutally noisy —
+> baseline alone swung **$6.38 → $10.37 (63%) on identical inputs**. What makes the
+> result credible isn't the median, it's that an independent metric reproduces the
+> ranking exactly:
+> ```
+> by cost:          combo < farthing < baseline < tokopt
+> by cache_create:  combo < farthing < baseline < tokopt
+> ```
 
 <div align="center">
 
 ### PROOF, NOT PROMISES
 
-| `−12%` | `+282%` | `0%` |
+| `10/10` | `2.4–8×` | `0.4%` |
 |:---:|:---:|:---:|
-| **farthing** — cache-safe, real | **headroom** — cache-bust, real bill | **dashboard truth** — its ledger said it *saved* |
+| **headroom** cost more in every trial | its `cache_create` inflation | what a **perfect** command-output filter is worth on a cache-dominated bill |
 
 </div>
+
+**The finding:** the only thing that moves a cache-dominated bill is **carrying less
+context** — not compressing it (busts the cache), not filtering side channels (too
+small), but **never putting the redundant thing in context in the first place.**
 
 ---
 
@@ -77,8 +89,8 @@ Claude to **re-create** the whole downstream context at 12× the price.
   dashboard never counts this). Net: **bill up 45–282%.**
 - **farthing** never touches the cached prefix. It trims the **output** lane
   (terse-output) and blocks **byte-identical re-reads** (read-ledger) — cache-safe
-  savings — while *measuring* cache churn instead of causing it. Net: **−12%,
-  cache_create flat.**
+  savings — while *measuring* cache churn instead of causing it. Net: **−28% median
+  (n=3, directional), cache_create down — never up.**
 
 > Same axis — `cache_create`. headroom **manufactures** it; farthing **measures and
 > avoids** it. That is the whole idea.
@@ -92,12 +104,16 @@ Every number below is reproducible from [`REPRODUCE.md`](REPRODUCE.md).
 ### Agentic matrix — 96 runs, tools ON ([results/matrix.md](results/matrix.md))
 4 arms × 8 add/fix/change tasks × N=3 on a real calculator project, accuracy-gated.
 
-| arm | median $/task | vs baseline | accuracy |
-|-----|-------------:|------------:|---------:|
-| baseline | $0.311 | — | 23/24 |
-| farthing terse | $0.296 | **−5%** | 24/24 |
-| caveman | $0.364 | **+17%** | 24/24 |
-| headroom | $0.581 | **+87%** | 24/24 |
+| arm | median $/task | vs baseline | accuracy | verdict |
+|-----|-------------:|------------:|---------:|---------|
+| baseline | $0.311 | — | 23/24 | — |
+| farthing terse | $0.296 | −5% | 24/24 | *within noise* |
+| caveman | $0.364 | +17% | 24/24 | *marginal* |
+| headroom | $0.581 | **+87%** | 24/24 | **survives** |
+
+Only headroom's **+87%** clears the noise floor here. The ±5% and +17% figures are
+reported for completeness but are **not claims** — see [`results/arms_4x3.md`](results/arms_4x3.md)
+for why session cost needs separation tests, not medians alone.
 
 ### Real project — monitored express sessions ([results/express_real_project.md](results/express_real_project.md))
 | task | baseline | headroom | actual bill | headroom dashboard |
@@ -119,8 +135,9 @@ Full write-up: [docs/FINDINGS.md](docs/FINDINGS.md).
 | tool | axis it attacks | verdict on Claude Code coding |
 |------|-----------------|-------------------------------|
 | **[Nadir](https://getnadir.com)** | *which model runs* (route + verify) | **−60%**, 98% quality — the axis that actually moves the bill |
-| **farthing** | *measures the whole bill; cache-safe layers* | **−5% to −12%**, accuracy-gated, never busts cache |
-| **caveman** | *output tokens* | **+16–17%** — cuts output (~1% of a coding bill) but adds per-turn injection |
+| **farthing** | *carry less context; cache-safe layers* | **−28% median (n=3, directional)** — cache-safe by construction, never busts cache |
+| **caveman** | *output tokens* | **+17%** — cuts output (~1% of a coding bill) but adds per-turn injection |
+| **token-optimizer** | *command output* | **no detectable effect** — its filter works (98% on `npm test`) but that's 0.4% of the bill |
 | **headroom** | *input tokens (compress)* | **+45% to +282%** — compresses, but rewriting the prefix busts the cache |
 
 > The savings live at **model choice** (Nadir) and **honest measurement + cache

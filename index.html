@@ -116,9 +116,9 @@
   <h3>Same real task, three arms, every turn metered</h3>
   <p class="muted" style="margin-top:0">Add a method to <b>expressjs/express</b> — a multi-turn Claude Code session on Opus.</p>
   <div class="cards" style="margin:22px 0 26px">
-    <div class="card base"><div class="lab">baseline</div><div class="big">$0.730</div><div class="sub">plain Claude Code</div></div>
-    <div class="card win"><div class="lab">farthing</div><div class="big">−12%</div><div class="sub">cache-safe · $0.643</div></div>
-    <div class="card bad"><div class="lab">headroom</div><div class="big">+282%</div><div class="sub">cache-bust · $2.788</div></div>
+    <div class="card base"><div class="lab">baseline</div><div class="big">$6.47</div><div class="sub">median · plain Claude Code</div></div>
+    <div class="card win"><div class="lab">combo</div><div class="big">−41%</div><div class="sub">cache-safe · 3/3 separation · n=3</div></div>
+    <div class="card bad"><div class="lab">headroom</div><div class="big">10/10</div><div class="sub">trials it cost MORE · cache-bust</div></div>
   </div>
   <div class="receipt">
     <div class="rh">Verification receipt · express / feature · Opus</div>
@@ -159,8 +159,8 @@
     <table>
       <tr><th>arm</th><th>median $/task (96 runs)</th><th>vs baseline</th><th>accuracy</th></tr>
       <tr><td>baseline</td><td class="n">$0.311</td><td class="n">—</td><td class="n">23/24</td></tr>
-      <tr><td>farthing terse</td><td class="n">$0.296</td><td class="n win">−5%</td><td class="n">24/24</td></tr>
-      <tr><td>caveman</td><td class="n">$0.364</td><td class="n bad">+17%</td><td class="n">24/24</td></tr>
+      <tr><td>farthing</td><td class="n">$4.623</td><td class="n win">−28%</td><td class="n">n=3 · directional</td></tr>
+      <tr><td>caveman</td><td class="n">$0.364</td><td class="n">+17%</td><td class="n">marginal</td></tr>
       <tr><td>headroom</td><td class="n">$0.581</td><td class="n bad">+87%</td><td class="n">24/24</td></tr>
     </table>
   </div>
@@ -173,7 +173,7 @@
     <table>
       <tr><th>tool</th><th>axis</th><th>verdict on Claude Code coding</th></tr>
       <tr><td><a href="https://getnadir.com">Nadir</a></td><td>which model runs (route + verify)</td><td class="win">−60%, 98% quality — the axis that moves the bill</td></tr>
-      <tr><td>farthing</td><td>measure bill; cache-safe layers</td><td class="win">−5% to −12%, gated, never busts cache</td></tr>
+      <tr><td>farthing</td><td>carry less context; cache-safe</td><td class="win">−28% median (n=3, directional); cannot bust cache</td></tr>
       <tr><td>caveman</td><td>output tokens</td><td class="bad">+16–17%</td></tr>
       <tr><td>headroom</td><td>input tokens (compress)</td><td class="bad">+45% to +282%</td></tr>
     </table>
